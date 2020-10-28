@@ -16,7 +16,35 @@
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.30</slf4j.version>
+
+        <!--  Tests  -->
+        <junit.version>4.13.1</junit.version>
+        <assertj.version>3.17.2</assertj.version>
     </properties>
+
+    <build>
+        <finalName>vote4lunch</finalName>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- Logging with SLF4J & LogBack -->
@@ -39,6 +67,20 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!--Test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
