@@ -1,7 +1,8 @@
 package com.github.io2357911.vote4lunch.service;
 
 import com.github.io2357911.vote4lunch.model.User;
-import com.github.io2357911.vote4lunch.repository.UserRepository;
+import com.github.io2357911.vote4lunch.repository.UserJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -12,10 +13,11 @@ import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkNotFoundW
 
 @Service
 public class UserService {
+    private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
-    private final UserRepository repository;
+    private final UserJpaRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserJpaRepository repository) {
         this.repository = repository;
     }
 
@@ -25,11 +27,12 @@ public class UserService {
     }
 
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     public User get(int id) {
-        return checkNotFoundWithId(repository.get(id), id);
+        User user = repository.findById(id).orElse(null);
+        return checkNotFoundWithId(user, id);
     }
 
     public User getByEmail(String email) {
@@ -38,7 +41,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll(SORT_NAME_EMAIL);
     }
 
     public void update(User user) {
