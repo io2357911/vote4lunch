@@ -1,33 +1,42 @@
 package com.github.io2357911.vote4lunch.repository;
 
 import com.github.io2357911.vote4lunch.model.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class UserRepository {
+    private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
+
+    private final UserCrudRepository crudRepository;
+
+    public UserRepository(UserCrudRepository crudRepository) {
+        this.crudRepository = crudRepository;
+    }
+
     // null if not found, when updated
     public User save(User user) {
-        throw new UnsupportedOperationException();
+        return crudRepository.save(user);
     }
 
     // false if not found
     public boolean delete(int id) {
-        throw new UnsupportedOperationException();
+        return crudRepository.delete(id) != 0;
     }
 
     // null if not found
     public User get(int id) {
-        throw new UnsupportedOperationException();
+        return crudRepository.findById(id).orElse(null);
     }
 
     // null if not found
     public User getByEmail(String email) {
-        throw new UnsupportedOperationException();
+        return crudRepository.getByEmail(email);
     }
 
     public List<User> getAll() {
-        throw new UnsupportedOperationException();
+        return crudRepository.findAll(SORT_NAME_EMAIL);
     }
 }
