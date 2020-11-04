@@ -10,9 +10,9 @@ import java.util.List;
 public class UserRepository {
     private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
-    private final UserCrudRepository crudRepository;
+    private final UserJpaRepository crudRepository;
 
-    public UserRepository(UserCrudRepository crudRepository) {
+    public UserRepository(UserJpaRepository crudRepository) {
         this.crudRepository = crudRepository;
     }
 
