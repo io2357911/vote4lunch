@@ -1,30 +1,18 @@
-package com.github.io2357911.vote4lunch.web.user;
+package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.UserTestData;
 import com.github.io2357911.vote4lunch.model.Role;
 import com.github.io2357911.vote4lunch.model.User;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static com.github.io2357911.vote4lunch.UserTestData.*;
 import static org.junit.Assert.assertThrows;
 
-@ContextConfiguration("classpath:spring/spring.xml")
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class UserControllerTest {
-
-    @Autowired
-    private UserController controller;
+public class UserControllerTest extends AbstractControllerTest<UserController> {
 
     @Test
     public void create() {

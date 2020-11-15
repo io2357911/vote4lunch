@@ -1,28 +1,15 @@
-package com.github.io2357911.vote4lunch.restaurant;
+package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
-import com.github.io2357911.vote4lunch.web.restaurant.RestaurantController;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static com.github.io2357911.vote4lunch.RestaurantTestData.*;
 import static org.junit.Assert.assertThrows;
 
-@ContextConfiguration("classpath:spring/spring.xml")
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class RestaurantControllerTest {
-
-    @Autowired
-    private RestaurantController controller;
+public class RestaurantControllerTest extends AbstractControllerTest<RestaurantController> {
 
     @Test
     public void create() {

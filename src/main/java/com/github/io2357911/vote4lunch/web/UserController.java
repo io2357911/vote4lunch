@@ -1,4 +1,4 @@
-package com.github.io2357911.vote4lunch.web.user;
+package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.User;
 import com.github.io2357911.vote4lunch.repository.UserJpaRepository;

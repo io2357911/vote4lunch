@@ -1,4 +1,4 @@
-package com.github.io2357911.vote4lunch.web.restaurant;
+package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
