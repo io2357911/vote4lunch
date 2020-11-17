@@ -5,7 +5,7 @@ import com.github.io2357911.vote4lunch.model.Restaurant;
 import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ;
 
 public class RestaurantTestData {
-    public static TestMatcher<Restaurant> MATCHER = TestMatcher.usingIgnoringFieldsComparator("dishes");
+    public static TestMatcher<Restaurant> MATCHER = TestMatcher.usingIgnoringFieldsComparator("dishes", "votes");
 
     public static final int MCDONALDS_ID = START_SEQ + 2;
     public static final int KFC_ID = START_SEQ + 3;

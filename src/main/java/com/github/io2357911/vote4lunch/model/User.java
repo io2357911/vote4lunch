@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
@@ -23,6 +24,9 @@ public class User extends AbstractNamedEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Vote> votes;
 
     public User() {
     }

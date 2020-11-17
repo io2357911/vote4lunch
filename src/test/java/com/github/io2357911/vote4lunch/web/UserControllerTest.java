@@ -20,8 +20,8 @@ public class UserControllerTest extends AbstractControllerTest<UserController> {
         int newId = created.id();
         User newUser = getNew();
         newUser.setId(newId);
-        USER_MATCHER.assertMatch(created, newUser);
-        USER_MATCHER.assertMatch(controller.get(newId), newUser);
+        MATCHER.assertMatch(created, newUser);
+        MATCHER.assertMatch(controller.get(newId), newUser);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class UserControllerTest extends AbstractControllerTest<UserController> {
     @Test
     public void get() {
         User user = controller.get(USER_ID);
-        USER_MATCHER.assertMatch(user, UserTestData.user);
+        MATCHER.assertMatch(user, UserTestData.user);
     }
 
     @Test
@@ -55,19 +55,19 @@ public class UserControllerTest extends AbstractControllerTest<UserController> {
     @Test
     public void getByEmail() {
         User user = controller.getByEmail("admin@gmail.com");
-        USER_MATCHER.assertMatch(user, admin);
+        MATCHER.assertMatch(user, admin);
     }
 
     @Test
     public void update() {
         User updated = getUpdated();
         controller.update(updated);
-        USER_MATCHER.assertMatch(controller.get(USER_ID), getUpdated());
+        MATCHER.assertMatch(controller.get(USER_ID), getUpdated());
     }
 
     @Test
     public void getAll() {
         List<User> all = controller.getAll();
-        USER_MATCHER.assertMatch(all, admin, user);
+        MATCHER.assertMatch(all, admin, user);
     }
 }
