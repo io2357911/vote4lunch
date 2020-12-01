@@ -23,8 +23,8 @@ public class RestaurantControllerTest extends AbstractControllerTest<RestaurantC
 
     @Test
     public void delete() {
-        controller.delete(MCDONALDS_ID);
-        assertThrows(NotFoundException.class, () -> controller.get(MCDONALDS_ID));
+        controller.delete(RESTAURANT1_ID);
+        assertThrows(NotFoundException.class, () -> controller.get(RESTAURANT1_ID));
     }
 
     @Test
@@ -34,8 +34,8 @@ public class RestaurantControllerTest extends AbstractControllerTest<RestaurantC
 
     @Test
     public void get() {
-        Restaurant entity = controller.get(MCDONALDS_ID);
-        MATCHER.assertMatch(entity, mcdonalds);
+        Restaurant entity = controller.get(RESTAURANT1_ID);
+        MATCHER.assertMatch(entity, restaurant1);
     }
 
     @Test
@@ -46,13 +46,13 @@ public class RestaurantControllerTest extends AbstractControllerTest<RestaurantC
     @Test
     public void getAll() {
         List<Restaurant> all = controller.getAll();
-        MATCHER.assertMatch(all, mcdonalds, kfc);
+        MATCHER.assertMatch(all, restaurant1, restaurant2);
     }
 
     @Test
     public void update() {
         Restaurant updated = getUpdated();
         controller.update(updated);
-        MATCHER.assertMatch(controller.get(MCDONALDS_ID), getUpdated());
+        MATCHER.assertMatch(controller.get(RESTAURANT1_ID), getUpdated());
     }
 }
