@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ;
 
 public class DishTestData {
-    public static TestMatcher<Dish> MATCHER = TestMatcher.usingIgnoringFieldsComparator("restaurant");
+    public static TestMatcher<Dish> MATCHER = TestMatcher.usingIgnoringFieldsComparator(Dish.class,"restaurant");
 
     public static final int MCDONALDS_DISH1_ID = START_SEQ + 4;
     public static final int MCDONALDS_DISH2_ID = START_SEQ + 5;

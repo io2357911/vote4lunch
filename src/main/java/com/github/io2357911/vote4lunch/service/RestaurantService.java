@@ -1,4 +1,4 @@
-package com.github.io2357911.vote4lunch.web;
+package com.github.io2357911.vote4lunch.service;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
@@ -13,12 +13,12 @@ import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkNew;
 import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Controller
-public class RestaurantController {
+public class RestaurantService {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final RestaurantJpaRepository repository;
 
-    public RestaurantController(RestaurantJpaRepository repository) {
+    public RestaurantService(RestaurantJpaRepository repository) {
         this.repository = repository;
     }
 

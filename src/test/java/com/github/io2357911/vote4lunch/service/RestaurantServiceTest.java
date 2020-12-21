@@ -1,7 +1,8 @@
-package com.github.io2357911.vote4lunch.web;
+package com.github.io2357911.vote4lunch.service;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
+import com.github.io2357911.vote4lunch.web.AbstractControllerTest;
 import org.junit.Test;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 import static com.github.io2357911.vote4lunch.RestaurantTestData.*;
 import static org.junit.Assert.assertThrows;
 
-public class RestaurantControllerTest extends AbstractControllerTest<RestaurantController> {
+public class RestaurantServiceTest extends AbstractControllerTest<RestaurantService> {
 
     @Test
     public void create() {

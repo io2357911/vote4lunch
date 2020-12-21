@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ;
 
 public class VoteTestData {
-    public static final TestMatcher<Vote> MATCHER = TestMatcher.usingIgnoringFieldsComparator("user", "restaurant");
+    public static final TestMatcher<Vote> MATCHER = TestMatcher.usingIgnoringFieldsComparator(Vote.class, "user", "restaurant");
 
     public static final int USER_VOTE1_ID = START_SEQ + 7;
     public static final int USER_VOTE2_ID = START_SEQ + 8;

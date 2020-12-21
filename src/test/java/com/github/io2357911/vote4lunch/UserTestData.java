@@ -6,7 +6,7 @@ import com.github.io2357911.vote4lunch.model.User;
 import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
-    public static TestMatcher<User> MATCHER = TestMatcher.usingIgnoringFieldsComparator("registered", "votes");
+    public static TestMatcher<User> MATCHER = TestMatcher.usingIgnoringFieldsComparator(User.class, "registered", "votes");
 
     public static final int USER_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
