@@ -37,8 +37,7 @@ public class RestaurantRestController {
 
     @GetMapping("/with-dishes")
     public List<Restaurant> getWithDishes(
-            @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-    ) {
+            @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("getWithDishes date={}", date);
         if (date == null) {
             date = LocalDate.now();
