@@ -4,7 +4,6 @@ import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.github.io2357911.vote4lunch.util.Util.nowIfNull;
 import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkNew;
 
 @RestController
@@ -26,8 +26,11 @@ public class RestaurantRestController {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private RestaurantJpaRepository repository;
+    private final RestaurantJpaRepository repository;
+
+    public RestaurantRestController(RestaurantJpaRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping
     public List<Restaurant> getAll() {
@@ -39,10 +42,7 @@ public class RestaurantRestController {
     public List<Restaurant> getWithDishes(
             @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("getWithDishes date={}", date);
-        if (date == null) {
-            date = LocalDate.now();
-        }
-        return repository.getWithDishes(date);
+        return repository.getWithDishes(nowIfNull(date));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
