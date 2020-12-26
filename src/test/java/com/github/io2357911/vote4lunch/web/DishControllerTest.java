@@ -25,8 +25,8 @@ public class DishControllerTest extends AbstractControllerTest<DishController> {
 
     @Test
     public void delete() {
-        controller.delete(MCDONALDS_DISH1_ID, RESTAURANT1_ID);
-        assertThrows(NotFoundException.class, () -> controller.get(MCDONALDS_DISH1_ID, RESTAURANT1_ID));
+        controller.delete(RESTAURANT1_DISH1_ID, RESTAURANT1_ID);
+        assertThrows(NotFoundException.class, () -> controller.get(RESTAURANT1_DISH1_ID, RESTAURANT1_ID));
     }
 
     @Test
@@ -36,8 +36,8 @@ public class DishControllerTest extends AbstractControllerTest<DishController> {
 
     @Test
     public void get() {
-        Dish entity = controller.get(MCDONALDS_DISH1_ID, RESTAURANT1_ID);
-        MATCHER.assertMatch(entity, mcdonaldsDish1);
+        Dish entity = controller.get(RESTAURANT1_DISH1_ID, RESTAURANT1_ID);
+        MATCHER.assertMatch(entity, restaurant1Dish1);
     }
 
     @Test
@@ -48,19 +48,19 @@ public class DishControllerTest extends AbstractControllerTest<DishController> {
     @Test
     public void getAll() {
         List<Dish> all = controller.getAll(RESTAURANT1_ID);
-        MATCHER.assertMatch(all, mcdonaldsDish1, mcdonaldsDish2);
+        MATCHER.assertMatch(all, restaurant1Dish1, restaurant1Dish2);
     }
 
     @Test
     public void update() {
         Dish updated = getUpdated();
         controller.update(updated, RESTAURANT1_ID);
-        MATCHER.assertMatch(controller.get(MCDONALDS_DISH1_ID, RESTAURANT1_ID), getUpdated());
+        MATCHER.assertMatch(controller.get(RESTAURANT1_DISH1_ID, RESTAURANT1_ID), getUpdated());
     }
 
     @Test
     public void updateNotOwn() {
-        assertThrows(NotFoundException.class, () -> controller.update(mcdonaldsDish1, RESTAURANT2_ID));
-        MATCHER.assertMatch(controller.get(MCDONALDS_DISH1_ID, RESTAURANT1_ID), mcdonaldsDish1);
+        assertThrows(NotFoundException.class, () -> controller.update(restaurant1Dish1, RESTAURANT2_ID));
+        MATCHER.assertMatch(controller.get(RESTAURANT1_DISH1_ID, RESTAURANT1_ID), restaurant1Dish1);
     }
 }
