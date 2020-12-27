@@ -17,6 +17,8 @@ import static com.github.io2357911.vote4lunch.DishTestData.MATCHER;
 import static com.github.io2357911.vote4lunch.DishTestData.restaurant1Dish1;
 import static com.github.io2357911.vote4lunch.RestaurantTestData.restaurant1;
 import static com.github.io2357911.vote4lunch.TestUtil.readFromJson;
+import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
+import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.web.DishRestController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,7 +33,8 @@ class DishRestControllerTest extends AbstractRestControllerTest {
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .param("restaurantId", String.valueOf(restaurant1.getId()))
-                .param("date", "2020-01-30"))
+                .param("date", "2020-01-30")
+                .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -42,6 +45,7 @@ class DishRestControllerTest extends AbstractRestControllerTest {
     void createWithLocation() throws Exception {
         Dish newDish = DishTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(createTo(restaurant1.getId(), newDish))))
                 .andDo(print());

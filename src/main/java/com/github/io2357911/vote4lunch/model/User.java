@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -76,6 +77,10 @@ public class User extends AbstractNamedEntity {
 
     public Role getRole() {
         return role;
+    }
+
+    public List<Role> getRoles() {
+       return Collections.singletonList(role);
     }
 
     public void setRole(Role role) {

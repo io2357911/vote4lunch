@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.github.io2357911.vote4lunch.RestaurantTestData.*;
 import static com.github.io2357911.vote4lunch.TestUtil.readFromJson;
+import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
+import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.web.RestaurantRestController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -24,7 +26,8 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -34,7 +37,8 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     @Test
     void getWithDishes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/with-dishes")
-                .param("date", "2020-01-30"))
+                .param("date", "2020-01-30")
+                .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -45,6 +49,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     void createWithLocation() throws Exception {
         Restaurant newRestaurant = RestaurantTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andDo(print());
