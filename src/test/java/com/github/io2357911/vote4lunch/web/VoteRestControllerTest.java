@@ -41,7 +41,7 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createVote() throws Exception {
+    void createOrUpdateVote() throws Exception {
         VoteTo newVote = asTo(getNew());
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))

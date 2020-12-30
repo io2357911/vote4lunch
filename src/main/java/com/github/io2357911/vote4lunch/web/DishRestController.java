@@ -4,16 +4,12 @@ import com.github.io2357911.vote4lunch.model.Dish;
 import com.github.io2357911.vote4lunch.repository.DishJpaRepository;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
 import com.github.io2357911.vote4lunch.to.DishTo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,10 +17,8 @@ import static com.github.io2357911.vote4lunch.util.Util.nowIfNull;
 
 @RestController
 @RequestMapping(value = DishRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class DishRestController {
+public class DishRestController extends AbstractRestController {
     static final String REST_URL = "/rest/dishes";
-
-    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final DishJpaRepository dishRepository;
     private final RestaurantJpaRepository restaurantRepository;
@@ -48,11 +42,7 @@ public class DishRestController {
         Dish newDish = fromTo(dishTo);
         newDish.setRestaurant(restaurantRepository.getOne(dishTo.getRestaurantId()));
         Dish created = dishRepository.save(newDish);
-
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
+        return createResponseEntity(REST_URL, created.getId(), created);
     }
 
     private static Dish fromTo(DishTo dishTo) {
