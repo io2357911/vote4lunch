@@ -1,8 +1,11 @@
 package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.to.VoteTo;
+import com.github.io2357911.vote4lunch.util.TimeProvider;
 import com.github.io2357911.vote4lunch.web.json.JsonUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,6 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class VoteRestControllerTest extends AbstractRestControllerTest {
+
+    @Autowired
+    private TimeProvider timeProvider;
+
+    @BeforeEach
+    void setTime() {
+        timeProvider.setTime(VoteRestController.MAX_VOTE_TIME);
+    }
 
     @Test
     void getVotes() throws Exception {

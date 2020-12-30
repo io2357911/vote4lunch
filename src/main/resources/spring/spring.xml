@@ -28,6 +28,8 @@
     <context:component-scan base-package="com.github.**.repository"/>
     <jpa:repositories base-package="com.github.**.repository"/>
 
+    <bean class="com.github.io2357911.vote4lunch.util.TimeProvider"/>
+
     <context:property-placeholder location="classpath:db/db.properties" system-properties-mode="OVERRIDE"/>
 
     <!--no pooling-->
