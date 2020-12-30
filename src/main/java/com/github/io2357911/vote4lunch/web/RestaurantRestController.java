@@ -33,20 +33,20 @@ public class RestaurantRestController {
     }
 
     @GetMapping
-    public List<Restaurant> getAll() {
+    public List<Restaurant> getRestaurants() {
         log.info("getAll");
         return repository.findAll();
     }
 
     @GetMapping("/with-dishes")
-    public List<Restaurant> getWithDishes(
+    public List<Restaurant> getRestaurantsWithDishes(
             @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("getWithDishes date={}", date);
         return repository.getWithDishes(nowIfNull(date));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         Assert.notNull(restaurant, "restaurant must not be null");
         checkNew(restaurant);

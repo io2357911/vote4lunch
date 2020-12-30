@@ -35,14 +35,14 @@ public class DishRestController {
     }
 
     @GetMapping
-    public List<Dish> getAll(@RequestParam int restaurantId,
-                             @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public List<Dish> getDishes(@RequestParam int restaurantId,
+                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("getAll restaurantId={}, date={}", restaurantId, date);
         return dishRepository.getAll(restaurantId, nowIfNull(date));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@RequestBody DishTo dishTo) {
+    public ResponseEntity<Dish> createDish(@RequestBody DishTo dishTo) {
         log.info("create {}", dishTo);
 
         Dish newDish = fromTo(dishTo);

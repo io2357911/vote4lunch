@@ -30,7 +30,7 @@ class DishRestControllerTest extends AbstractRestControllerTest {
     private DishJpaRepository dishRepository;
 
     @Test
-    void getAll() throws Exception {
+    void getDishes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .param("restaurantId", String.valueOf(restaurant1.getId()))
                 .param("date", "2020-01-30")
@@ -42,7 +42,7 @@ class DishRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createWithLocation() throws Exception {
+    void createDish() throws Exception {
         Dish newDish = DishTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))

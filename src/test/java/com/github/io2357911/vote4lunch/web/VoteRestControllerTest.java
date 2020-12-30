@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VoteRestControllerTest extends AbstractRestControllerTest {
 
     @Test
-    void getAll() throws Exception {
+    void getVotes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
@@ -30,7 +30,7 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getByDate() throws Exception {
+    void getVoteByDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/byDate")
                 .param("date", "2020-01-30")
                 .with(userHttpBasic(user)))
@@ -41,7 +41,7 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createWithLocation() throws Exception {
+    void createVote() throws Exception {
         VoteTo newVote = asTo(getNew());
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))

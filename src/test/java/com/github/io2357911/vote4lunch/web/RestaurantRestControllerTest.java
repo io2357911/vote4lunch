@@ -25,7 +25,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     private RestaurantJpaRepository restaurantRepository;
 
     @Test
-    void getAll() throws Exception {
+    void getRestaurants() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
@@ -35,7 +35,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getWithDishes() throws Exception {
+    void getRestaurantsWithDishes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/with-dishes")
                 .param("date", "2020-01-30")
                 .with(userHttpBasic(user)))
@@ -46,7 +46,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createWithLocation() throws Exception {
+    void createRestaurant() throws Exception {
         Restaurant newRestaurant = RestaurantTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))

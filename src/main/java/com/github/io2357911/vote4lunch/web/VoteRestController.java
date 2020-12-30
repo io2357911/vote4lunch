@@ -15,6 +15,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -42,22 +43,22 @@ public class VoteRestController {
     }
 
     @GetMapping
-    public List<VoteTo> getAll(@AuthenticationPrincipal AuthorizedUser authUser) {
+    public List<VoteTo> getVotes(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("getAll user={}", authUser);
         return asTos(voteRepository.getAll(authUser.getId()));
     }
 
     @GetMapping("/byDate")
-    public VoteTo getByDate(@AuthenticationPrincipal AuthorizedUser authUser,
-                            @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public VoteTo getVoteByDate(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("getByDate user={} date={}", authUser, date);
         Vote vote = voteRepository.getByDate(authUser.getId(), nowIfNull(date));
         return asTo(vote);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> createWithLocation(@AuthenticationPrincipal AuthorizedUser authUser,
-                                                     @RequestBody VoteTo voteTo) {
+    public ResponseEntity<VoteTo> createVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                                             @RequestBody VoteTo voteTo) {
         log.info("create user={}, voteTo={}", authUser, voteTo);
 
         Vote newVote = new Vote(null, userRepository.getOne(authUser.getId()),
