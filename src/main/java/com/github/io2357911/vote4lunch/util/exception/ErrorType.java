@@ -7,6 +7,7 @@ public enum ErrorType {
     DATA_NOT_FOUND(HttpStatus.UNPROCESSABLE_ENTITY),
     DATA_ERROR(HttpStatus.CONFLICT),
     VALIDATION_ERROR(HttpStatus.UNPROCESSABLE_ENTITY),
+    FORBIDDEN_ERROR(HttpStatus.FORBIDDEN),
     WRONG_REQUEST(HttpStatus.BAD_REQUEST);
 
     private final HttpStatus status;

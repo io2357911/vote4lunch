@@ -33,6 +33,11 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
+    void getUnauth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized());
+    }
+    @Test
     void getVotes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .param("date", "2020-01-30")

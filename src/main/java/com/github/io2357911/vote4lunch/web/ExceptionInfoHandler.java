@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,11 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(VoteCantBeChangedException.class)
     public ResponseEntity<ErrorInfo> voteCantBeChangedError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorInfo> accessDeniedError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, FORBIDDEN_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
