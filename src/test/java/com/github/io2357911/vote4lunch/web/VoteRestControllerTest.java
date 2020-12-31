@@ -35,22 +35,12 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
     @Test
     void getVotes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
-                .with(userHttpBasic(user)))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TO_MATCHER.contentJson(asTo(userVote1), asTo(userVote2)));
-    }
-
-    @Test
-    void getVoteByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/byDate")
                 .param("date", "2020-01-30")
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TO_MATCHER.contentJson(asTo(userVote1)));
+                .andExpect(TO_MATCHER.contentJson(asTo(userVote1), asTo(adminVote1)));
     }
 
     @Test
