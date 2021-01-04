@@ -37,6 +37,10 @@ public class RestaurantTestData {
         return new Restaurant(null, "GoodFood");
     }
 
+    public static Restaurant getInvalid() {
+        return new Restaurant(null, "");
+    }
+
     public static Restaurant getUpdated() {
         Restaurant updated = new Restaurant(restaurant1);
         updated.setName("NewFood");

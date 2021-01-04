@@ -25,6 +25,10 @@ public class DishTestData {
         return new Dish(null, "Super meal", LocalDate.of(2020, 2, 1), 59);
     }
 
+    public static Dish getInvalid() {
+        return new Dish(null, "", null, 0);
+    }
+
     public static Dish getUpdated() {
         Dish updated = new Dish(restaurant1Dish1);
         updated.setName("Super new dish");

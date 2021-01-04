@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class DishRestController extends AbstractRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createDish(@RequestBody DishTo dishTo) {
+    public ResponseEntity<Dish> createDish(@Valid @RequestBody DishTo dishTo) {
         log.info("create {}", dishTo);
 
         Dish newDish = fromTo(dishTo);

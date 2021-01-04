@@ -3,6 +3,7 @@ package com.github.io2357911.vote4lunch.to;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.time.LocalDate;
 
@@ -11,11 +12,12 @@ public class DishTo {
     int restaurantId;
 
     @NotBlank
+    @Size(min = 2, max = 100)
     String name;
 
     LocalDate date;
 
-    @Range(max = 100000)
+    @Range(min = 10, max = 100000)
     int price;
 
     @ConstructorProperties({"restaurantId", "name", "date", "price"})

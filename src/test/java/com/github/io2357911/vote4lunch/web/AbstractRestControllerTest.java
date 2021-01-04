@@ -17,8 +17,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -56,7 +57,7 @@ public class AbstractRestControllerTest {
             assertEquals("http://localhost" + url, error.getUrl());
             assertEquals(type, error.getType());
             if (details.length != 0) {
-                assertArrayEquals(details, error.getDetails());
+                assertThat(details).hasSameElementsAs(Arrays.asList(error.getDetails()));
             }
         };
     }

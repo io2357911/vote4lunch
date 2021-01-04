@@ -25,7 +25,7 @@ public class Dish extends AbstractNamedEntity {
     private LocalDate date;
 
     @Column(name = "price", nullable = false)
-    @Range(max = 100000)
+    @Range(min = 10, max = 100000)
     private int price;
 
     public Dish() {

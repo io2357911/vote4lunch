@@ -19,6 +19,7 @@ import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.admin;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.util.exception.ErrorType.FORBIDDEN_ERROR;
+import static com.github.io2357911.vote4lunch.util.exception.ErrorType.VALIDATION_ERROR;
 import static com.github.io2357911.vote4lunch.web.DishRestController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -60,6 +61,18 @@ class DishRestControllerTest extends AbstractRestControllerTest {
         newDish.setId(created.id());
         MATCHER.assertMatch(created, newDish);
         MATCHER.assertMatch(dishRepository.findById(newDish.id()).get(), newDish);
+    }
+
+    @Test
+    void createInvalidDish() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(createTo(restaurant1.getId(), getInvalid()))))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorInfo(REST_URL, VALIDATION_ERROR, "[price] must be between 10 and 100000",
+                        "[name] size must be between 2 and 100", "[name] must not be blank"));
     }
 
     @Test

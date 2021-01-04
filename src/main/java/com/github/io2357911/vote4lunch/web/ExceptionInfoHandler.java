@@ -10,6 +10,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,6 +32,15 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorInfo> accessDeniedError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, true, FORBIDDEN_ERROR);
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorInfo> bindValidationError(HttpServletRequest req, BindException e) {
+        String[] details = e.getBindingResult().getFieldErrors().stream()
+                .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
+                .toArray(String[]::new);
+
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details);
     }
 
     @ExceptionHandler(Exception.class)

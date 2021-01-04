@@ -15,6 +15,7 @@ import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.admin;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.util.exception.ErrorType.FORBIDDEN_ERROR;
+import static com.github.io2357911.vote4lunch.util.exception.ErrorType.VALIDATION_ERROR;
 import static com.github.io2357911.vote4lunch.web.RestaurantRestController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -66,6 +67,18 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
         newRestaurant.setId(newId);
         MATCHER.assertMatch(created, newRestaurant);
         MATCHER.assertMatch(restaurantRepository.findById(newId).get(), newRestaurant);
+    }
+
+    @Test
+    void createInvalidRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(getInvalid())))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorInfo(REST_URL, VALIDATION_ERROR, "[name] size must be between 2 and 100",
+                        "[name] must not be blank"));
     }
 
     @Test
