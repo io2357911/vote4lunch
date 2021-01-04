@@ -18,9 +18,10 @@ import static com.github.io2357911.vote4lunch.TestUtil.readFromJson;
 import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.admin;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.FORBIDDEN_ERROR;
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.VALIDATION_ERROR;
+import static com.github.io2357911.vote4lunch.util.exception.ErrorType.*;
 import static com.github.io2357911.vote4lunch.web.DishRestController.REST_URL;
+import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_DISH_DUPLICATE;
+import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_DISH_FK_NOT_FOUND;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,6 +74,28 @@ class DishRestControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorInfo(REST_URL, VALIDATION_ERROR, "[price] must be between 10 and 100000",
                         "[name] size must be between 2 and 100", "[name] must not be blank"));
+    }
+
+    @Test
+    void createInvalidRestaurantDish() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(createTo(NOT_FOUND, getNew()))))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorInfo(REST_URL, DATA_ERROR, EXCEPTION_DISH_FK_NOT_FOUND));
+    }
+
+    @Test
+    void createDuplicateDish() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(createTo(restaurant1.getId(), restaurant1Dish1))))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorInfo(REST_URL, DATA_ERROR, EXCEPTION_DISH_DUPLICATE));
     }
 
     @Test

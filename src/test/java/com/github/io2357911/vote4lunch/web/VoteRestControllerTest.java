@@ -15,7 +15,9 @@ import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.VoteTestData.*;
 import static com.github.io2357911.vote4lunch.util.VoteUtil.asTo;
+import static com.github.io2357911.vote4lunch.util.exception.ErrorType.DATA_ERROR;
 import static com.github.io2357911.vote4lunch.util.exception.ErrorType.VALIDATION_ERROR;
+import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_VOTE_FK_NOT_FOUND;
 import static com.github.io2357911.vote4lunch.web.VoteRestController.MAX_VOTE_TIME;
 import static com.github.io2357911.vote4lunch.web.VoteRestController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -60,6 +62,18 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
         VoteTo created = readFromJson(action, VoteTo.class);
         newVote.setId(created.getId());
         TO_MATCHER.assertMatch(created, newVote);
+    }
+
+    @Test
+    void createInvalidVote() throws Exception {
+        VoteTo newVote = asTo(getInvalid());
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newVote)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorInfo(REST_URL, DATA_ERROR, EXCEPTION_VOTE_FK_NOT_FOUND));
     }
 
     @Test

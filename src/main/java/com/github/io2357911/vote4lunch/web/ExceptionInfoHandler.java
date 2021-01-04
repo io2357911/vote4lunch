@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.github.io2357911.vote4lunch.util.exception.ErrorType.*;
 
@@ -23,6 +26,18 @@ import static com.github.io2357911.vote4lunch.util.exception.ErrorType.*;
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
+
+    public static final String EXCEPTION_RESTAURANT_DUPLICATE = "Restaurant with the same name already exists";
+    public static final String EXCEPTION_DISH_DUPLICATE = "Dish with the same name and date already exists";
+    public static final String EXCEPTION_DISH_FK_NOT_FOUND = "Restaurant not found for the dish";
+    public static final String EXCEPTION_VOTE_FK_NOT_FOUND = "Restaurant not found for the vote";
+
+    private static final Map<String, String> CONSTRAINTS_MAP = new HashMap<String, String>() {{
+        put("restaurants_unique_name_idx", EXCEPTION_RESTAURANT_DUPLICATE);
+        put("dishes_unique_restaurant_name_date_idx", EXCEPTION_DISH_DUPLICATE);
+        put("table: dishes", EXCEPTION_DISH_FK_NOT_FOUND);
+        put("table: votes", EXCEPTION_VOTE_FK_NOT_FOUND);
+    }};
 
     @ExceptionHandler(VoteCantBeChangedException.class)
     public ResponseEntity<ErrorInfo> voteCantBeChangedError(HttpServletRequest req, Exception e) {
@@ -40,7 +55,21 @@ public class ExceptionInfoHandler {
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .toArray(String[]::new);
 
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details);
+        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR, details);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorInfo> conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+        String rootMsg = ValidationUtil.getRootCause(e).getMessage();
+        if (rootMsg != null) {
+            String lowerCaseMsg = rootMsg.toLowerCase();
+            for (Map.Entry<String, String> entry : CONSTRAINTS_MAP.entrySet()) {
+                if (lowerCaseMsg.contains(entry.getKey())) {
+                    return logAndGetErrorInfo(req, e, true, DATA_ERROR, entry.getValue());
+                }
+            }
+        }
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
     @ExceptionHandler(Exception.class)

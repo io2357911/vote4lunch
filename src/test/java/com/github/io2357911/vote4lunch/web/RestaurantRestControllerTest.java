@@ -14,8 +14,8 @@ import static com.github.io2357911.vote4lunch.TestUtil.readFromJson;
 import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.admin;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.FORBIDDEN_ERROR;
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.VALIDATION_ERROR;
+import static com.github.io2357911.vote4lunch.util.exception.ErrorType.*;
+import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_RESTAURANT_DUPLICATE;
 import static com.github.io2357911.vote4lunch.web.RestaurantRestController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -79,6 +79,18 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorInfo(REST_URL, VALIDATION_ERROR, "[name] size must be between 2 and 100",
                         "[name] must not be blank"));
+    }
+
+    @Test
+    void createDuplicateRestaurant() throws Exception {
+        Restaurant restaurant = new Restaurant(null, restaurant1.getName());
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(restaurant)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(errorInfo(REST_URL, DATA_ERROR, EXCEPTION_RESTAURANT_DUPLICATE));
     }
 
     @Test
