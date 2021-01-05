@@ -4,6 +4,7 @@ import com.github.io2357911.vote4lunch.model.Dish;
 import com.github.io2357911.vote4lunch.repository.DishJpaRepository;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
 import com.github.io2357911.vote4lunch.to.DishTo;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public class DishRestController extends AbstractRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(value = {CACHE_RESTAURANTS_WITH_DISHES}, allEntries = true)
     public ResponseEntity<Dish> createDish(@Valid @RequestBody DishTo dishTo) {
         log.info("create {}", dishTo);
 

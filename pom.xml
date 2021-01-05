@@ -30,6 +30,9 @@
         <!-- DB -->
         <hsqldb.version>2.3.4</hsqldb.version>
 
+        <!--Cache-->
+        <ehcache.version>3.9.0</ehcache.version>
+
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.30</slf4j.version>
@@ -179,6 +182,19 @@
             <artifactId>spring-security-test</artifactId>
             <version>${spring.security.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Cache -->
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <scope>runtime</scope>
+            <version>${ehcache.version}</version>
         </dependency>
 
         <!--Test-->

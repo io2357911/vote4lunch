@@ -2,6 +2,8 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,20 +31,23 @@ public class RestaurantRestController extends AbstractRestController {
     }
 
     @GetMapping
+    @Cacheable(CACHE_RESTAURANTS)
     public List<Restaurant> getRestaurants() {
         log.info("getAll");
         return repository.findAll();
     }
 
     @GetMapping("/with-dishes")
+    @Cacheable(value = CACHE_RESTAURANTS_WITH_DISHES, key = "#date")
     public List<Restaurant> getRestaurantsWithDishes(
-            @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("getWithDishes date={}", date);
         return repository.getWithDishes(nowIfNull(date));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(value = {CACHE_RESTAURANTS, CACHE_RESTAURANTS_WITH_DISHES}, allEntries = true)
     public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         Assert.notNull(restaurant, "restaurant must not be null");

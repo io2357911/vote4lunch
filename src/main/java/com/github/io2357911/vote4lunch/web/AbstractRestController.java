@@ -10,6 +10,9 @@ import java.net.URI;
 public class AbstractRestController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
+    public static final String CACHE_RESTAURANTS = "restaurants";
+    public static final String CACHE_RESTAURANTS_WITH_DISHES = "restaurants-with-dishes";
+
     protected <T> ResponseEntity<T> createResponseEntity(String url, int id, T voteTo) {
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(url + "/{id}")
