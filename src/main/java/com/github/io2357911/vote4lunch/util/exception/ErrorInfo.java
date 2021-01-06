@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ErrorInfo {
     private final String url;
-    private final ErrorType type;
+    private final int status;
     private final String[] details;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public ErrorInfo(@JsonProperty("url") CharSequence url, @JsonProperty("type") ErrorType type,
+    public ErrorInfo(@JsonProperty("url") CharSequence url, @JsonProperty("status") int status,
                      @JsonProperty("details") String... details) {
         this.url = url.toString();
-        this.type = type;
+        this.status = status;
         this.details = details;
     }
 
@@ -20,8 +20,8 @@ public class ErrorInfo {
         return url;
     }
 
-    public ErrorType getType() {
-        return type;
+    public int getStatus() {
+        return status;
     }
 
     public String[] getDetails() {

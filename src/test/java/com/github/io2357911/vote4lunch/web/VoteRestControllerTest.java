@@ -15,11 +15,11 @@ import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.VoteTestData.*;
 import static com.github.io2357911.vote4lunch.util.VoteUtil.asTo;
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.DATA_ERROR;
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.VALIDATION_ERROR;
 import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_VOTE_FK_NOT_FOUND;
 import static com.github.io2357911.vote4lunch.web.VoteRestController.MAX_VOTE_TIME;
 import static com.github.io2357911.vote4lunch.web.VoteRestController.REST_URL;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,7 +73,7 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
                 .content(JsonUtil.writeValue(newVote)))
                 .andDo(print())
                 .andExpect(status().isConflict())
-                .andExpect(errorInfo(REST_URL, DATA_ERROR, EXCEPTION_VOTE_FK_NOT_FOUND));
+                .andExpect(errorInfo(REST_URL, CONFLICT, EXCEPTION_VOTE_FK_NOT_FOUND));
     }
 
     @Test
@@ -85,7 +85,7 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
                 .content(JsonUtil.writeValue(asTo(getNew()))))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(errorInfo(REST_URL, VALIDATION_ERROR,
+                .andExpect(errorInfo(REST_URL, UNPROCESSABLE_ENTITY,
                         "It's after 11:00. It is too late, vote can't be changed"));
     }
 }

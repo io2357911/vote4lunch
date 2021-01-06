@@ -2,13 +2,13 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.util.ValidationUtil;
 import com.github.io2357911.vote4lunch.util.exception.ErrorInfo;
-import com.github.io2357911.vote4lunch.util.exception.ErrorType;
 import com.github.io2357911.vote4lunch.util.exception.VoteCantBeChangedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.io2357911.vote4lunch.util.exception.ErrorType.*;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
@@ -41,17 +41,17 @@ public class ExceptionInfoHandler {
 
     @ExceptionHandler(VoteCantBeChangedException.class)
     public ResponseEntity<ErrorInfo> voteCantBeChangedError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
+        return logAndGetErrorInfo(req, e, true, UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorInfo> accessDeniedError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, FORBIDDEN_ERROR);
+        return logAndGetErrorInfo(req, e, true, FORBIDDEN);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorInfo> illegalArgumentError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
+        return logAndGetErrorInfo(req, e, true, UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(BindException.class)
@@ -60,7 +60,7 @@ public class ExceptionInfoHandler {
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .toArray(String[]::new);
 
-        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR, details);
+        return logAndGetErrorInfo(req, e, true, UNPROCESSABLE_ENTITY, details);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -70,31 +70,31 @@ public class ExceptionInfoHandler {
             String lowerCaseMsg = rootMsg.toLowerCase();
             for (Map.Entry<String, String> entry : CONSTRAINTS_MAP.entrySet()) {
                 if (lowerCaseMsg.contains(entry.getKey())) {
-                    return logAndGetErrorInfo(req, e, true, DATA_ERROR, entry.getValue());
+                    return logAndGetErrorInfo(req, e, true, CONFLICT, entry.getValue());
                 }
             }
         }
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+        return logAndGetErrorInfo(req, e, true, CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorInfo> handleError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, APP_ERROR);
+        return logAndGetErrorInfo(req, e, true, INTERNAL_SERVER_ERROR);
     }
 
     private static ResponseEntity<ErrorInfo> logAndGetErrorInfo(HttpServletRequest req, Exception e,
-                                                                boolean logException, ErrorType errorType,
+                                                                boolean logException, HttpStatus status,
                                                                 String... details) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
 
         if (logException) {
-            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+            log.error(status + " at request " + req.getRequestURL(), rootCause);
         } else {
-            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+            log.warn("{} at request  {}: {}", status, req.getRequestURL(), rootCause.toString());
         }
 
-        return ResponseEntity.status(errorType.getStatus())
-                .body(new ErrorInfo(req.getRequestURL(), errorType,
+        return ResponseEntity.status(status)
+                .body(new ErrorInfo(req.getRequestURL(), status.value(),
                         details.length != 0 ? details : new String[]{ValidationUtil.getMessage(rootCause)})
                 );
     }

@@ -2,8 +2,8 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.TestUtil;
 import com.github.io2357911.vote4lunch.util.exception.ErrorInfo;
-import com.github.io2357911.vote4lunch.util.exception.ErrorType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -51,11 +51,11 @@ public class AbstractRestControllerTest {
         return mockMvc.perform(builder);
     }
 
-    public ResultMatcher errorInfo(String url, ErrorType type, String... details) {
+    public ResultMatcher errorInfo(String url, HttpStatus status, String... details) {
         return result -> {
             ErrorInfo error = TestUtil.readFromJsonMvcResult(result, ErrorInfo.class);
             assertEquals("http://localhost" + url, error.getUrl());
-            assertEquals(type, error.getType());
+            assertEquals(status.value(), error.getStatus());
             if (details.length != 0) {
                 assertThat(details).hasSameElementsAs(Arrays.asList(error.getDetails()));
             }
