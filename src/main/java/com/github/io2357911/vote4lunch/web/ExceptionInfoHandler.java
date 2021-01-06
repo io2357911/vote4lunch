@@ -49,6 +49,11 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, true, FORBIDDEN_ERROR);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorInfo> illegalArgumentError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
+    }
+
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorInfo> bindValidationError(HttpServletRequest req, BindException e) {
         String[] details = e.getBindingResult().getFieldErrors().stream()

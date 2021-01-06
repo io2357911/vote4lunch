@@ -4,11 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorType {
     APP_ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
-    DATA_NOT_FOUND(HttpStatus.UNPROCESSABLE_ENTITY),
     DATA_ERROR(HttpStatus.CONFLICT),
     VALIDATION_ERROR(HttpStatus.UNPROCESSABLE_ENTITY),
-    FORBIDDEN_ERROR(HttpStatus.FORBIDDEN),
-    WRONG_REQUEST(HttpStatus.BAD_REQUEST);
+    FORBIDDEN_ERROR(HttpStatus.FORBIDDEN);
 
     private final HttpStatus status;
 
