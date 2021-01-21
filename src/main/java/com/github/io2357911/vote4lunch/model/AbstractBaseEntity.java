@@ -1,5 +1,6 @@
 package com.github.io2357911.vote4lunch.model;
 
+import com.github.io2357911.vote4lunch.HasId;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity implements Persistable<Integer> {
+public abstract class AbstractBaseEntity implements HasId, Persistable<Integer> {
     public static final int START_SEQ = 100000;
 
     @Id
@@ -32,7 +33,6 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
         return id;
     }
 
-    // doesn't work for hibernate lazy proxy
     public int id() {
         Assert.notNull(id, "Entity must have id");
         return id;

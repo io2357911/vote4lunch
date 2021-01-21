@@ -2,6 +2,7 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.util.ValidationUtil;
 import com.github.io2357911.vote4lunch.util.exception.ErrorInfo;
+import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
 import com.github.io2357911.vote4lunch.util.exception.VoteCantBeChangedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,11 @@ public class ExceptionInfoHandler {
 
     @ExceptionHandler(VoteCantBeChangedException.class)
     public ResponseEntity<ErrorInfo> voteCantBeChangedError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true, UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorInfo> notFoundError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, true, UNPROCESSABLE_ENTITY);
     }
 

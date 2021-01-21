@@ -59,6 +59,13 @@ curl --location \
     --user user@mail.com:user
 ```
 
+## Get restaurant
+```sh
+curl --location \
+    --request GET 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
+    --user user@mail.com:user
+```
+
 ## Get restaurants with dishes
 ```sh
 curl --location \
@@ -76,6 +83,26 @@ curl --location \
         "name": "Hot pizza"
     }
     '
+```
+
+## Update a restaurant
+```sh
+curl --location \
+    --request PUT 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
+    --header 'Content-Type: application/json' \
+    --user admin@mail.com:admin \
+    --data-raw '{
+        "id": 100002,
+        "name": "Burger King"
+    }
+    '
+```
+
+## Delete a restaurant
+```sh
+curl --location \
+    --request DELETE 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
+    --user admin@mail.com:admin
 ```
 
 ## Get dishes

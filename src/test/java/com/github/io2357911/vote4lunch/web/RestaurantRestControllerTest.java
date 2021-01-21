@@ -2,6 +2,8 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
+import com.github.io2357911.vote4lunch.to.RestaurantTo;
+import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
 import com.github.io2357911.vote4lunch.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +11,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.github.io2357911.vote4lunch.RestaurantTestData.NOT_FOUND;
 import static com.github.io2357911.vote4lunch.RestaurantTestData.*;
 import static com.github.io2357911.vote4lunch.TestUtil.readFromJson;
 import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
 import static com.github.io2357911.vote4lunch.UserTestData.admin;
 import static com.github.io2357911.vote4lunch.UserTestData.user;
+import static com.github.io2357911.vote4lunch.util.RestaurantUtil.asEntity;
+import static com.github.io2357911.vote4lunch.util.RestaurantUtil.asTo;
 import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_RESTAURANT_DUPLICATE;
 import static com.github.io2357911.vote4lunch.web.RestaurantRestController.REST_URL;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -30,6 +36,54 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     void getUnauth() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/" + RESTAURANT1_ID)
+                .with(userHttpBasic(user)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MATCHER.contentJson(restaurant1));
+    }
+
+    @Test
+    void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/" + NOT_FOUND)
+                .with(userHttpBasic(user)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void update() throws Exception {
+        Restaurant updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + RESTAURANT1_ID)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(asTo(updated))))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        MATCHER.assertMatch(restaurantRepository.findById(RESTAURANT1_ID).get(), updated);
+    }
+
+    @Test
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + RESTAURANT1_ID)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        assertThrows(NotFoundException.class, () -> restaurantRepository.getExisted(RESTAURANT1_ID));
+    }
+
+    @Test
+    void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + NOT_FOUND)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -58,13 +112,13 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(newRestaurant)))
+                .content(JsonUtil.writeValue(asTo(newRestaurant))))
                 .andDo(print());
 
-        Restaurant created = readFromJson(action, Restaurant.class);
+        RestaurantTo created = readFromJson(action, RestaurantTo.class);
         int newId = created.id();
         newRestaurant.setId(newId);
-        MATCHER.assertMatch(created, newRestaurant);
+        MATCHER.assertMatch(asEntity(created), newRestaurant);
         MATCHER.assertMatch(restaurantRepository.findById(newId).get(), newRestaurant);
     }
 
