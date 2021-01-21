@@ -15,11 +15,11 @@ public class DishTestData {
     public static final int NOT_FOUND = 2;
 
     public static final Dish restaurant1Dish1 = new Dish(RESTAURANT1_DISH1_ID, "Big Mac",
-            LocalDate.of(2020, 1, 30), 199);
+            LocalDate.now(), 199);
     public static final Dish restaurant1Dish2 = new Dish(RESTAURANT1_DISH2_ID, "Chicken Nuggets",
             LocalDate.of(2020, 1, 31), 99);
     public static final Dish restaurant2Dish1 = new Dish(RESTAURANT2_DISH1_ID, "Original bucket",
-            LocalDate.of(2020, 1, 30), 79);
+            LocalDate.now(), 79);
 
     public static Dish getNew() {
         return new Dish(null, "Super meal", LocalDate.of(2020, 2, 1), 59);

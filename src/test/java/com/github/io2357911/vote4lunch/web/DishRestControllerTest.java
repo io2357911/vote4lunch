@@ -42,7 +42,6 @@ class DishRestControllerTest extends AbstractRestControllerTest {
     void getDishes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .param("restaurantId", String.valueOf(restaurant1.getId()))
-                .param("date", "2020-01-30")
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
                 .andDo(print())

@@ -62,7 +62,7 @@ curl --location \
 ## Get restaurants with dishes
 ```sh
 curl --location \
-    --request GET 'http://localhost:8080/vote4lunch/rest/restaurants/with-dishes?date=2020-01-30' \
+    --request GET 'http://localhost:8080/vote4lunch/rest/restaurants/with-dishes' \
     --user user@mail.com:user
 ```
 
@@ -81,7 +81,7 @@ curl --location \
 ## Get dishes
 ```sh
 curl --location \
-    --request GET 'http://localhost:8080/vote4lunch/rest/dishes?date=2020-01-30&restaurantId=100002' \
+    --request GET 'http://localhost:8080/vote4lunch/rest/dishes?restaurantId=100002' \
     --user user@mail.com:user
 ```
 
@@ -102,8 +102,8 @@ curl --location \
 ## Get votes
 ```sh
 curl --location \
-    --request GET 'http://localhost:8080/vote4lunch/rest/votes?date=2020-01-30' \
-    --user user@mail.com:user \
+    --request GET 'http://localhost:8080/vote4lunch/rest/votes' \
+    --user user@mail.com:user
 ```
 
 ## Do the vote

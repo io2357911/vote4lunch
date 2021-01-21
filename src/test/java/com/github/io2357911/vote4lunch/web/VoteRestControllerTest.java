@@ -42,7 +42,6 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
     @Test
     void getVotes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
-                .param("date", "2020-01-30")
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
                 .andDo(print())

@@ -14,7 +14,6 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.github.io2357911.vote4lunch.util.Util.nowIfNull;
 import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkNew;
 
 @RestController
@@ -38,9 +37,9 @@ public class RestaurantRestController extends AbstractRestController {
     @GetMapping("/with-dishes")
     @Cacheable(value = CACHE_RESTAURANTS_WITH_DISHES, key = "#date")
     public List<Restaurant> getRestaurantsWithDishes(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        log.info("getWithDishes date={}", date);
-        return repository.getWithDishes(nowIfNull(date));
+            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+            log.info("getWithDishes date={}", date);
+        return repository.getWithDishes(date);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -17,11 +17,11 @@ VALUES ('McDonald''s'),
        ('KFC');
 
 INSERT INTO dishes (name, date, price, restaurant_id)
-VALUES ('Big Mac', '2020-01-30 00:00:00', 199, 100002),
-       ('Chicken Nuggets', '2020-01-31 00:00:00', 99, 100002),
-       ('Original bucket', '2020-01-30 00:00:00', 79, 100003);
+VALUES ('Big Mac', now(), 199, 100002),
+       ('Chicken Nuggets', '2020-01-31', 99, 100002),
+       ('Original bucket',  now(), 79, 100003);
 
 INSERT INTO votes (date, user_id, restaurant_id)
-VALUES ('2020-01-30 00:00:00', 100000, 100002),
-       ('2020-01-31 00:00:00', 100000, 100003),
-       ('2020-01-30 00:00:00', 100001, 100002);
+VALUES (now(), 100000, 100002),
+       ('2020-01-31', 100000, 100003),
+       (now(), 100001, 100002);

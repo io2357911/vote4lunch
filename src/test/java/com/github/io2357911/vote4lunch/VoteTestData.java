@@ -20,12 +20,12 @@ public class VoteTestData {
     public static final int ADMIN_VOTE1_ID = START_SEQ + 9;
     public static final int NOT_FOUND = 2;
 
-    public static final Vote userVote1 = new Vote(USER_VOTE1_ID, user, restaurant1, LocalDate.of(2020, 1, 30));
+    public static final Vote userVote1 = new Vote(USER_VOTE1_ID, user, restaurant1, LocalDate.now());
     public static final Vote userVote2 = new Vote(USER_VOTE2_ID, user, restaurant2, LocalDate.of(2020, 1, 31));
-    public static final Vote adminVote1 = new Vote(ADMIN_VOTE1_ID, admin, restaurant1, LocalDate.of(2020, 1, 30));
+    public static final Vote adminVote1 = new Vote(ADMIN_VOTE1_ID, admin, restaurant1, LocalDate.now());
 
     public static Vote getNew() {
-        return new Vote(null, user, restaurant1, LocalDate.now());
+        return new Vote(null, user, restaurant2, LocalDate.now());
     }
 
     public static Vote getInvalid() {
