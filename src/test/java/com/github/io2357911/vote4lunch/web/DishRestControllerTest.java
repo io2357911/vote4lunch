@@ -110,6 +110,6 @@ class DishRestControllerTest extends AbstractRestControllerTest {
     }
 
     private static DishTo createTo(int restaurantId, Dish dish) {
-        return new DishTo(restaurantId, dish.getName(), dish.getDate(), dish.getPrice());
+        return new DishTo(restaurantId, dish.getName(), dish.getCreated(), dish.getPrice());
     }
 }

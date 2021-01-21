@@ -49,9 +49,9 @@ public class VoteRestController extends AbstractRestController {
     }
 
     @GetMapping
-    public List<VoteTo> getVotes(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        log.info("getVotes date={}", date);
-        List<Vote> votes = voteRepository.getByDate(nowIfNull(date));
+    public List<VoteTo> getVotes(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
+        log.info("getVotes created={}", created);
+        List<Vote> votes = voteRepository.getByCreated(nowIfNull(created));
         return asTos(votes);
     }
 
@@ -68,7 +68,7 @@ public class VoteRestController extends AbstractRestController {
 
         LocalDate date = LocalDate.now();
 
-        Vote vote = voteRepository.getByUserAndDate(authUser.getId(), date);
+        Vote vote = voteRepository.getByUserAndCreated(authUser.getId(), date);
         if (vote == null) {
             vote = new Vote(null, userRepository.getOne(authUser.getId()),
                     restaurantRepository.getOne(voteTo.getRestaurantId()), date);

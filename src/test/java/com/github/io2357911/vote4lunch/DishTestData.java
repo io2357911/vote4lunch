@@ -32,7 +32,7 @@ public class DishTestData {
     public static Dish getUpdated() {
         Dish updated = new Dish(restaurant1Dish1);
         updated.setName("Super new dish");
-        updated.setDate(LocalDate.of(2020, 2, 2));
+        updated.setCreated(LocalDate.of(2020, 2, 2));
         updated.setPrice(1);
         return updated;
     }

@@ -13,6 +13,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface RestaurantJpaRepository extends JpaRepository<Restaurant, Integer> {
     @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r JOIN FETCH r.dishes d WHERE d.date = :date")
-    List<Restaurant> getWithDishes(@Param("date") LocalDate date);
+    @Query("SELECT r FROM Restaurant r JOIN FETCH r.dishes d WHERE d.created = :created")
+    List<Restaurant> getWithDishes(@Param("created") LocalDate created);
 }

@@ -34,7 +34,7 @@ public class ExceptionInfoHandler {
 
     private static final Map<String, String> CONSTRAINTS_MAP = new HashMap<String, String>() {{
         put("restaurants_unique_name_idx", EXCEPTION_RESTAURANT_DUPLICATE);
-        put("dishes_unique_restaurant_name_date_idx", EXCEPTION_DISH_DUPLICATE);
+        put("dishes_unique_restaurant_name_created_idx", EXCEPTION_DISH_DUPLICATE);
         put("table: dishes", EXCEPTION_DISH_FK_NOT_FOUND);
         put("table: votes", EXCEPTION_VOTE_FK_NOT_FOUND);
     }};

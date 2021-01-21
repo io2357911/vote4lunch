@@ -10,16 +10,16 @@ public class VoteTo {
 
     int restaurantId;
 
-    LocalDate date;
+    LocalDate created;
 
     VoteTo() {
     }
 
-    public VoteTo(Integer id, Integer userId, int restaurantId, LocalDate date) {
+    public VoteTo(Integer id, Integer userId, int restaurantId, LocalDate created) {
         this.id = id;
         this.restaurantId = restaurantId;
         this.userId = userId;
-        this.date = date;
+        this.created = created;
     }
 
     public Integer getId() {
@@ -46,12 +46,12 @@ public class VoteTo {
         this.restaurantId = restaurantId;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCreated() {
+        return created;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class VoteTo {
                 "id=" + id +
                 ", userId=" + userId +
                 ", restaurantId=" + restaurantId +
-                ", date=" + date +
+                ", created=" + created +
                 '}';
     }
 }

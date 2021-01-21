@@ -15,16 +15,16 @@ public class DishTo {
     @Size(min = 2, max = 100)
     String name;
 
-    LocalDate date;
+    LocalDate created;
 
     @Range(min = 10, max = 100000)
     int price;
 
-    @ConstructorProperties({"restaurantId", "name", "date", "price"})
-    public DishTo(int restaurantId, @NotBlank String name, LocalDate date, @Range(max = 100000) int price) {
+    @ConstructorProperties({"restaurantId", "name", "created", "price"})
+    public DishTo(int restaurantId, @NotBlank String name, LocalDate created, @Range(max = 100000) int price) {
         this.restaurantId = restaurantId;
         this.name = name;
-        this.date = date;
+        this.created = created;
         this.price = price;
     }
 
@@ -36,8 +36,8 @@ public class DishTo {
         return name;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCreated() {
+        return created;
     }
 
     public int getPrice() {

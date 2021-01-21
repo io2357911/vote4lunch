@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "dishes", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"restaurant_id", "name", "date"}, name = "dishes_unique_restaurant_name_date_idx")})
+        @UniqueConstraint(columnNames = {"restaurant_id", "name", "created"}, name = "dishes_unique_restaurant_name_created_idx")})
 public class Dish extends AbstractNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -20,9 +20,9 @@ public class Dish extends AbstractNamedEntity {
     @JsonBackReference
     private Restaurant restaurant;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "created", nullable = false)
     @NotNull
-    private LocalDate date;
+    private LocalDate created;
 
     @Column(name = "price", nullable = false)
     @Range(min = 10, max = 100000)
@@ -31,14 +31,14 @@ public class Dish extends AbstractNamedEntity {
     public Dish() {
     }
 
-    public Dish(Integer id, String name, LocalDate date, int price) {
+    public Dish(Integer id, String name, LocalDate created, int price) {
         super(id, name);
-        this.date = date;
+        this.created = created;
         this.price = price;
     }
 
     public Dish(Dish dish) {
-        this(dish.getId(), dish.getName(), dish.getDate(), dish.getPrice());
+        this(dish.getId(), dish.getName(), dish.getCreated(), dish.getPrice());
     }
 
     public Restaurant getRestaurant() {
@@ -49,12 +49,12 @@ public class Dish extends AbstractNamedEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCreated() {
+        return created;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 
     public int getPrice() {
@@ -70,7 +70,7 @@ public class Dish extends AbstractNamedEntity {
         return "Dish{" +
                 "id=" + id +
                 ", name=" + name +
-                ", date=" + date +
+                ", created=" + created +
                 ", price=" + price +
                 '}';
     }

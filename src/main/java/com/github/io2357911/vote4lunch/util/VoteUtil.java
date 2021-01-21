@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class VoteUtil {
     public static VoteTo asTo(Vote vote) {
-        return new VoteTo(vote.getId(), vote.getUser().getId(), vote.getRestaurant().getId(), vote.getDate());
+        return new VoteTo(vote.getId(), vote.getUser().getId(), vote.getRestaurant().getId(), vote.getCreated());
     }
 
     public static List<VoteTo> asTos(List<Vote> votes) {

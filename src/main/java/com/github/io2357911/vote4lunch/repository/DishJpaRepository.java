@@ -11,6 +11,6 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface DishJpaRepository extends JpaRepository<Dish, Integer> {
-    @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId AND d.date=:date")
-    List<Dish> getAll(@Param("restaurantId") int restaurantId, @Param("date") LocalDate date);
+    @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId AND d.created=:created")
+    List<Dish> getAll(@Param("restaurantId") int restaurantId, @Param("created") LocalDate created);
 }

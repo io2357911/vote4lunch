@@ -33,9 +33,9 @@ public class DishRestController extends AbstractRestController {
 
     @GetMapping
     public List<Dish> getDishes(@RequestParam int restaurantId,
-                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        log.info("getAll restaurantId={}, date={}", restaurantId, date);
-        return dishRepository.getAll(restaurantId, nowIfNull(date));
+                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
+        log.info("getAll restaurantId={}, created={}", restaurantId, created);
+        return dishRepository.getAll(restaurantId, nowIfNull(created));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -51,6 +51,6 @@ public class DishRestController extends AbstractRestController {
     }
 
     private static Dish fromTo(DishTo dishTo) {
-        return new Dish(null, dishTo.getName(), nowIfNull(dishTo.getDate()), dishTo.getPrice());
+        return new Dish(null, dishTo.getName(), nowIfNull(dishTo.getCreated()), dishTo.getPrice());
     }
 }

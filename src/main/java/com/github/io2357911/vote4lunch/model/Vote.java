@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "restaurant_id", "date"}, name = "votes_unique_user_restaurant_date_idx")})
+        @UniqueConstraint(columnNames = {"user_id", "restaurant_id", "created"}, name = "votes_unique_user_restaurant_created_idx")})
 public class Vote extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,20 +22,20 @@ public class Vote extends AbstractBaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "created", nullable = false)
     @NotNull
-    private LocalDate date;
+    private LocalDate created;
 
     public Vote() {
     }
 
     public Vote(Vote vote) {
-        this(vote.getId(), vote.getUser(), vote.getRestaurant(), vote.getDate());
+        this(vote.getId(), vote.getUser(), vote.getRestaurant(), vote.getCreated());
     }
 
-    public Vote(Integer id, User user, Restaurant restaurant, LocalDate date) {
+    public Vote(Integer id, User user, Restaurant restaurant, LocalDate created) {
         super(id);
-        this.date = date;
+        this.created = created;
         this.user = user;
         this.restaurant = restaurant;
     }
@@ -56,19 +56,19 @@ public class Vote extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCreated() {
+        return created;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreated(LocalDate date) {
+        this.created = date;
     }
 
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", date=" + date +
+                ", created=" + created +
                 '}';
     }
 }
