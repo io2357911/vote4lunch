@@ -1,6 +1,5 @@
 package com.github.io2357911.vote4lunch.to;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
@@ -9,7 +8,6 @@ public class RestaurantTo extends BaseTo {
 
     @NotBlank
     @Size(min = 2, max = 100)
-    @Column(name = "name", nullable = false)
     private final String name;
 
     @ConstructorProperties({"id", "name"})

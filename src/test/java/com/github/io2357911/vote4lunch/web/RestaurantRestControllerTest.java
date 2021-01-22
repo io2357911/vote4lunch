@@ -39,7 +39,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getRestaurant() throws Exception {
+    void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/" + RESTAURANT1_ID)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getRestaurantsWithDishes() throws Exception {
+    void getWithDishes() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/with-dishes")
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
@@ -107,7 +107,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createRestaurant() throws Exception {
+    void create() throws Exception {
         Restaurant newRestaurant = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
@@ -123,7 +123,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createInvalidRestaurant() throws Exception {
+    void createInvalid() throws Exception {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createDuplicateRestaurant() throws Exception {
+    void createDuplicate() throws Exception {
         Restaurant restaurant = new Restaurant(null, restaurant1.getName());
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
@@ -147,7 +147,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void createRestaurantAccessDenied() throws Exception {
+    void createAccessDenied() throws Exception {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)

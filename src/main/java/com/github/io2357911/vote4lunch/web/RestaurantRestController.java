@@ -56,7 +56,7 @@ public class RestaurantRestController extends AbstractRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> get(@PathVariable int id) {
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable int id) {
         log.info("get restaurant {}", id);
         return ResponseEntity.of(repository.findById(id));
     }
@@ -64,7 +64,7 @@ public class RestaurantRestController extends AbstractRestController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody RestaurantTo to, @PathVariable int id) {
+    public void updateRestaurant(@Valid @RequestBody RestaurantTo to, @PathVariable int id) {
         log.info("update {}", to);
         assureIdConsistent(to, id);
         checkNotFoundWithId(repository.findById(id), "Restaurant id=" + id + " not found");
@@ -74,8 +74,8 @@ public class RestaurantRestController extends AbstractRestController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
+    public void deleteRestaurant(@PathVariable int id) {
         log.info("delete {}", id);
-        checkSingleModification(repository.delete(id), "User id=" + id + " not found");
+        checkSingleModification(repository.delete(id), "Restaurant id=" + id + " not found");
     }
 }

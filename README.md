@@ -59,7 +59,7 @@ curl --location \
     --user user@mail.com:user
 ```
 
-## Get restaurant
+## Get a restaurant
 ```sh
 curl --location \
     --request GET 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
@@ -112,6 +112,13 @@ curl --location \
     --user user@mail.com:user
 ```
 
+## Get a dish
+```sh
+curl --location \
+    --request GET 'http://localhost:8080/vote4lunch/rest/dishes/100004' \
+    --user user@mail.com:user
+```
+
 ## Create a dish
 ```sh
 curl --location \
@@ -124,6 +131,27 @@ curl --location \
         "price": 15
     }
     '
+```
+
+## Update a dish
+```sh
+curl --location \
+    --request PUT 'http://localhost:8080/vote4lunch/rest/dishes/100004' \
+    --header 'Content-Type: application/json' \
+    --user admin@mail.com:admin \
+    --data-raw '{
+        "restaurantId": 100002,
+        "name": "Tasty nuggets",
+        "price": 20
+    }
+    '
+```
+
+## Delete a dish
+```sh
+curl --location \
+    --request DELETE 'http://localhost:8080/vote4lunch/rest/dishes/100004' \
+    --user admin@mail.com:admin
 ```
 
 ## Get votes

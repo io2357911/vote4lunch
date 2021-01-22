@@ -7,21 +7,22 @@ import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.time.LocalDate;
 
-public class DishTo {
+public class DishTo extends BaseTo {
 
-    int restaurantId;
+    private final int restaurantId;
 
     @NotBlank
     @Size(min = 2, max = 100)
-    String name;
+    private final String name;
 
-    LocalDate created;
+    private final LocalDate created;
 
-    @Range(min = 10, max = 100000)
-    int price;
+    @Range(min = 10)
+    private final int price;
 
-    @ConstructorProperties({"restaurantId", "name", "created", "price"})
-    public DishTo(int restaurantId, @NotBlank String name, LocalDate created, @Range(max = 100000) int price) {
+    @ConstructorProperties({"id", "restaurantId", "name", "created", "price"})
+    public DishTo(Integer id, int restaurantId, @NotBlank String name, LocalDate created, int price) {
+        super(id);
         this.restaurantId = restaurantId;
         this.name = name;
         this.created = created;
@@ -42,5 +43,16 @@ public class DishTo {
 
     public int getPrice() {
         return price;
+    }
+
+    @Override
+    public String toString() {
+        return "DishTo{" +
+                "id=" + id +
+                ", restaurantId=" + restaurantId +
+                ", name=" + name +
+                ", created=" + created +
+                ", price=" + price +
+                '}';
     }
 }
