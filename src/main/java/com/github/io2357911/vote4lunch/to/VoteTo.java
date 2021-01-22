@@ -2,9 +2,7 @@ package com.github.io2357911.vote4lunch.to;
 
 import java.time.LocalDate;
 
-public class VoteTo {
-
-    Integer id;
+public class VoteTo extends BaseTo {
 
     Integer userId;
 
@@ -16,9 +14,9 @@ public class VoteTo {
     }
 
     public VoteTo(Integer id, Integer userId, int restaurantId, LocalDate created) {
-        this.id = id;
-        this.restaurantId = restaurantId;
+        super(id);
         this.userId = userId;
+        this.restaurantId = restaurantId;
         this.created = created;
     }
 

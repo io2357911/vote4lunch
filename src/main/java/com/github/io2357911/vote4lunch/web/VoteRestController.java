@@ -7,8 +7,10 @@ import com.github.io2357911.vote4lunch.repository.UserJpaRepository;
 import com.github.io2357911.vote4lunch.repository.VoteJpaRepository;
 import com.github.io2357911.vote4lunch.to.VoteTo;
 import com.github.io2357911.vote4lunch.util.TimeProvider;
+import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
 import com.github.io2357911.vote4lunch.util.exception.VoteCantBeChangedException;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -19,11 +21,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import static com.github.io2357911.vote4lunch.util.Util.nowIfNull;
+import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkSingleModification;
 import static com.github.io2357911.vote4lunch.util.VoteUtil.asTo;
-import static com.github.io2357911.vote4lunch.util.VoteUtil.asTos;
 
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,34 +50,55 @@ public class VoteRestController extends AbstractRestController {
     }
 
     @GetMapping
-    public List<VoteTo> getVotes(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
-        log.info("getVotes created={}", created);
-        List<Vote> votes = voteRepository.getByCreated(nowIfNull(created));
-        return asTos(votes);
+    public VoteTo getVoteByDate(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
+        log.info("getVoteByDate user={}, created={}", authUser, created);
+        return asTo(voteRepository.getByUserAndCreated(authUser.getId(), nowIfNull(created)));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> createOrUpdateVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
-                                                     @RequestBody VoteTo voteTo) {
-        log.info("create user={}, voteTo={}", authUser, voteTo);
+    @GetMapping("/{id}")
+    public VoteTo getVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                          @PathVariable int id) {
+        log.info("getVote user={}, vote {}", authUser, id);
+        return asTo(voteRepository.get(id, authUser.getId()));
+    }
 
+    @PostMapping
+    public ResponseEntity<VoteTo> createVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                                             @RequestParam int restaurantId) {
+        log.info("createVote user={}, restaurantId={}", authUser, restaurantId);
+        Vote vote = new Vote(null, userRepository.getOne(authUser.getId()),
+                restaurantRepository.getOne(restaurantId), LocalDate.now());
+        Vote created = voteRepository.save(vote);
+        return createResponseEntity(REST_URL, created.getId(), asTo(created));
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                           @RequestParam int restaurantId) {
+        log.info("updateVote user={}, restaurantId={}", authUser, restaurantId);
+        checkVoteCanBeChanged();
+        Vote vote = voteRepository.getByUserAndCreated(authUser.getId(), LocalDate.now())
+                .orElseThrow(() -> new NotFoundException("Vote not found"));
+        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        voteRepository.save(vote);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+                           @PathVariable int id) {
+        log.info("deleteVote {}", id);
+        checkVoteCanBeChanged();
+        checkSingleModification(voteRepository.delete(id, authUser.getId()), "Vote id=" + id + " not found");
+    }
+
+    private void checkVoteCanBeChanged() {
         if (timeProvider.getTime().isAfter(MAX_VOTE_TIME)) {
             throw new VoteCantBeChangedException("It's after "
                     + MAX_VOTE_TIME.format(DateTimeFormatter.ofPattern("HH:mm"))
                     + ". It is too late, vote can't be changed");
         }
-
-        LocalDate date = LocalDate.now();
-
-        Vote vote = voteRepository.getByUserAndCreated(authUser.getId(), date);
-        if (vote == null) {
-            vote = new Vote(null, userRepository.getOne(authUser.getId()),
-                    restaurantRepository.getOne(voteTo.getRestaurantId()), date);
-        } else {
-            vote.setRestaurant(restaurantRepository.getOne(voteTo.getRestaurantId()));
-        }
-
-        Vote created = voteRepository.save(vote);
-        return createResponseEntity(REST_URL, created.getId(), asTo(created));
     }
 }

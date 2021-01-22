@@ -24,4 +24,4 @@ VALUES ('Big Mac', now(), 199, 100002),
 INSERT INTO votes (created, user_id, restaurant_id)
 VALUES (now(), 100000, 100002),
        ('2020-01-31', 100000, 100003),
-       (now(), 100001, 100002);
+       ('2020-01-31', 100001, 100002);

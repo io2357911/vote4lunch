@@ -1,6 +1,5 @@
 package com.github.io2357911.vote4lunch;
 
-import com.github.io2357911.vote4lunch.model.Restaurant;
 import com.github.io2357911.vote4lunch.model.Vote;
 import com.github.io2357911.vote4lunch.to.VoteTo;
 
@@ -8,7 +7,8 @@ import java.time.LocalDate;
 
 import static com.github.io2357911.vote4lunch.RestaurantTestData.restaurant1;
 import static com.github.io2357911.vote4lunch.RestaurantTestData.restaurant2;
-import static com.github.io2357911.vote4lunch.UserTestData.*;
+import static com.github.io2357911.vote4lunch.UserTestData.admin;
+import static com.github.io2357911.vote4lunch.UserTestData.user;
 import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ;
 
 public class VoteTestData {
@@ -25,10 +25,12 @@ public class VoteTestData {
     public static final Vote adminVote1 = new Vote(ADMIN_VOTE1_ID, admin, restaurant1, LocalDate.now());
 
     public static Vote getNew() {
-        return new Vote(null, user, restaurant2, LocalDate.now());
+        return new Vote(null, admin, restaurant2, LocalDate.now());
     }
 
-    public static Vote getInvalid() {
-        return new Vote(null, user, new Restaurant(NOT_FOUND, ""), LocalDate.now());
+    public static Vote getUpdated() {
+        Vote updated = new Vote(userVote1);
+        updated.setRestaurant(restaurant2);
+        return updated;
     }
 }

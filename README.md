@@ -52,28 +52,30 @@ docker run -p 8080:8080 vote4lunch
 
 # REST API curl examples
 
-## Get all restaurants
+## Restaurants API
+
+### Get all
 ```sh
 curl --location \
     --request GET 'http://localhost:8080/vote4lunch/rest/restaurants' \
     --user user@mail.com:user
 ```
 
-## Get a restaurant
+### Get
 ```sh
 curl --location \
     --request GET 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
     --user user@mail.com:user
 ```
 
-## Get restaurants with dishes
+### Get with dishes
 ```sh
 curl --location \
     --request GET 'http://localhost:8080/vote4lunch/rest/restaurants/with-dishes' \
     --user user@mail.com:user
 ```
 
-## Create a restaurant
+### Create
 ```sh
 curl --location \
     --request POST 'http://localhost:8080/vote4lunch/rest/restaurants' \
@@ -85,7 +87,7 @@ curl --location \
     '
 ```
 
-## Update a restaurant
+### Update
 ```sh
 curl --location \
     --request PUT 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
@@ -98,28 +100,42 @@ curl --location \
     '
 ```
 
-## Delete a restaurant
+### Delete
 ```sh
 curl --location \
     --request DELETE 'http://localhost:8080/vote4lunch/rest/restaurants/100002' \
     --user admin@mail.com:admin
 ```
 
-## Get dishes
+### Access denied error
+```sh
+curl --location \
+    --request POST 'http://localhost:8080/vote4lunch/rest/restaurants' \
+    --header 'Content-Type: application/json' \
+    --user user@mail.com:user \
+    --data-raw '{
+        "name": "Hot pizza"
+    }
+    '
+```
+
+## Dishes API
+
+### Get all
 ```sh
 curl --location \
     --request GET 'http://localhost:8080/vote4lunch/rest/dishes?restaurantId=100002' \
     --user user@mail.com:user
 ```
 
-## Get a dish
+### Get
 ```sh
 curl --location \
     --request GET 'http://localhost:8080/vote4lunch/rest/dishes/100004' \
     --user user@mail.com:user
 ```
 
-## Create a dish
+### Create
 ```sh
 curl --location \
     --request POST 'http://localhost:8080/vote4lunch/rest/dishes' \
@@ -133,7 +149,7 @@ curl --location \
     '
 ```
 
-## Update a dish
+### Update
 ```sh
 curl --location \
     --request PUT 'http://localhost:8080/vote4lunch/rest/dishes/100004' \
@@ -147,44 +163,14 @@ curl --location \
     '
 ```
 
-## Delete a dish
+### Delete
 ```sh
 curl --location \
     --request DELETE 'http://localhost:8080/vote4lunch/rest/dishes/100004' \
     --user admin@mail.com:admin
 ```
 
-## Get votes
-```sh
-curl --location \
-    --request GET 'http://localhost:8080/vote4lunch/rest/votes' \
-    --user user@mail.com:user
-```
-
-## Do the vote
-```sh
-curl --location \
-    --request POST 'http://localhost:8080/vote4lunch/rest/votes' \
-    --header 'Content-Type: application/json' \
-    --user user@mail.com:user \
-    --data-raw '{
-        "restaurantId": 100003
-    }'
-```
-
-## Access denied error
-```sh
-curl --location \
-    --request POST 'http://localhost:8080/vote4lunch/rest/restaurants' \
-    --header 'Content-Type: application/json' \
-    --user user@mail.com:user \
-    --data-raw '{
-        "name": "Hot pizza"
-    }
-    '
-```
-
-## Validation error
+### Validation error
 ```sh
 curl --location \
     --request POST 'http://localhost:8080/vote4lunch/rest/dishes' \
@@ -196,4 +182,41 @@ curl --location \
         "price": 0
     }
     '
+```
+
+## Votes API
+
+### Get by date
+```sh
+curl --location \
+    --request GET 'http://localhost:8080/vote4lunch/rest/votes' \
+    --user user@mail.com:user
+```
+
+### Get
+```sh
+curl --location \
+    --request GET 'http://localhost:8080/vote4lunch/rest/votes/100007' \
+    --user user@mail.com:user
+```
+
+### Create
+```sh
+curl --location \
+    --request POST 'http://localhost:8080/vote4lunch/rest/votes?restaurantId=100003' \
+    --user user@mail.com:user
+```
+
+### Update
+```sh
+curl --location \
+    --request PUT 'http://localhost:8080/vote4lunch/rest/votes?restaurantId=100003' \
+    --user user@mail.com:user \
+```
+
+### Delete
+```sh
+curl --location \
+    --request DELETE 'http://localhost:8080/vote4lunch/rest/votes/100007' \
+    --user user@mail.com:user
 ```
