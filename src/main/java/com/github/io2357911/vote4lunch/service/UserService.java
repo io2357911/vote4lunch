@@ -2,7 +2,7 @@ package com.github.io2357911.vote4lunch.service;
 
 import com.github.io2357911.vote4lunch.AuthorizedUser;
 import com.github.io2357911.vote4lunch.model.User;
-import com.github.io2357911.vote4lunch.repository.UserJpaRepository;
+import com.github.io2357911.vote4lunch.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @Service("userService")
 public class UserService implements UserDetailsService {
 
-    private final UserJpaRepository repository;
+    private final UserRepository repository;
 
-    public UserService(UserJpaRepository repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
 

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface RestaurantJpaRepository extends BaseRepository<Restaurant> {
+public interface RestaurantRepository extends BaseRepository<Restaurant> {
     @Modifying
     @Transactional
     @Query("DELETE FROM Restaurant r WHERE r.id=:id")

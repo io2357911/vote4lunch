@@ -2,9 +2,9 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.AuthorizedUser;
 import com.github.io2357911.vote4lunch.model.Vote;
-import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
-import com.github.io2357911.vote4lunch.repository.UserJpaRepository;
-import com.github.io2357911.vote4lunch.repository.VoteJpaRepository;
+import com.github.io2357911.vote4lunch.repository.RestaurantRepository;
+import com.github.io2357911.vote4lunch.repository.UserRepository;
+import com.github.io2357911.vote4lunch.repository.VoteRepository;
 import com.github.io2357911.vote4lunch.to.VoteTo;
 import com.github.io2357911.vote4lunch.util.TimeProvider;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
@@ -13,8 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -33,15 +33,15 @@ public class VoteRestController extends AbstractRestController {
 
     static final String REST_URL = "/rest/votes";
 
-    private final VoteJpaRepository voteRepository;
-    private final UserJpaRepository userRepository;
-    private final RestaurantJpaRepository restaurantRepository;
+    private final VoteRepository voteRepository;
+    private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
     private final TimeProvider timeProvider;
 
-    public VoteRestController(VoteJpaRepository voteRepository,
-                              UserJpaRepository userRepository,
-                              RestaurantJpaRepository restaurantRepository,
+    public VoteRestController(VoteRepository voteRepository,
+                              UserRepository userRepository,
+                              RestaurantRepository restaurantRepository,
                               TimeProvider timeProvider) {
         this.voteRepository = voteRepository;
         this.userRepository = userRepository;
@@ -51,7 +51,7 @@ public class VoteRestController extends AbstractRestController {
 
     @GetMapping
     public VoteTo getVoteByDate(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
-                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
+                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
         log.info("getVoteByDate user={}, created={}", authUser, created);
         return asTo(voteRepository.getByUserAndCreated(authUser.getId(), nowIfNull(created)));
     }
@@ -75,6 +75,7 @@ public class VoteRestController extends AbstractRestController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     public void updateVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
                            @RequestParam int restaurantId) {
         log.info("updateVote user={}, restaurantId={}", authUser, restaurantId);

@@ -1,7 +1,7 @@
 package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
-import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
+import com.github.io2357911.vote4lunch.repository.RestaurantRepository;
 import com.github.io2357911.vote4lunch.to.RestaurantTo;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
 import com.github.io2357911.vote4lunch.web.json.JsonUtil;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RestaurantRestControllerTest extends AbstractRestControllerTest {
 
     @Autowired
-    private RestaurantJpaRepository restaurantRepository;
+    private RestaurantRepository restaurantRepository;
 
     @Test
     void getUnauth() throws Exception {
@@ -87,7 +87,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getRestaurants() throws Exception {
+    void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())
@@ -153,7 +153,6 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNew())))
                 .andDo(print())
-                .andExpect(status().isForbidden())
-                .andExpect(errorInfo(REST_URL, FORBIDDEN, "Access is denied"));
+                .andExpect(status().isForbidden());
     }
 }

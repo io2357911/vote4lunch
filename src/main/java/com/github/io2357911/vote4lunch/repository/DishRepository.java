@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface DishJpaRepository extends BaseRepository<Dish> {
+public interface DishRepository extends BaseRepository<Dish> {
     @Modifying
     @Transactional
     @Query("DELETE FROM Dish d WHERE d.id=:id")

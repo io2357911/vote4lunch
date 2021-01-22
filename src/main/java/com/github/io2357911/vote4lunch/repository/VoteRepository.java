@@ -1,6 +1,5 @@
 package com.github.io2357911.vote4lunch.repository;
 
-import com.github.io2357911.vote4lunch.model.Dish;
 import com.github.io2357911.vote4lunch.model.Vote;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
-public interface VoteJpaRepository extends BaseRepository<Vote> {
+public interface VoteRepository extends BaseRepository<Vote> {
     @Modifying
     @Transactional
     @Query("DELETE FROM Vote v WHERE v.id = :id and v.user.id = :userId")

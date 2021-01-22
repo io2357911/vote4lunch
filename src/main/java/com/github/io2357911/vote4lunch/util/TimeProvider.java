@@ -7,7 +7,7 @@ import java.time.LocalTime;
 @Component
 public class TimeProvider {
 
-    LocalTime time;
+    private LocalTime time;
 
     public LocalTime getTime() {
         return time == null ? LocalTime.now() : time;

@@ -1,7 +1,7 @@
 package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Restaurant;
-import com.github.io2357911.vote4lunch.repository.RestaurantJpaRepository;
+import com.github.io2357911.vote4lunch.repository.RestaurantRepository;
 import com.github.io2357911.vote4lunch.to.RestaurantTo;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,9 +24,9 @@ import static com.github.io2357911.vote4lunch.util.ValidationUtil.*;
 public class RestaurantRestController extends AbstractRestController {
     static final String REST_URL = "/rest/restaurants";
 
-    private final RestaurantJpaRepository repository;
+    private final RestaurantRepository repository;
 
-    public RestaurantRestController(RestaurantJpaRepository repository) {
+    public RestaurantRestController(RestaurantRepository repository) {
         this.repository = repository;
     }
 
@@ -45,7 +45,6 @@ public class RestaurantRestController extends AbstractRestController {
         return repository.getWithDishes(date);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(value = {CACHE_RESTAURANTS, CACHE_RESTAURANTS_WITH_DISHES}, allEntries = true)
     public ResponseEntity<RestaurantTo> createRestaurant(@Valid @RequestBody RestaurantTo to) {
@@ -61,9 +60,9 @@ public class RestaurantRestController extends AbstractRestController {
         return ResponseEntity.of(repository.findById(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     public void updateRestaurant(@Valid @RequestBody RestaurantTo to, @PathVariable int id) {
         log.info("update {}", to);
         assureIdConsistent(to, id);
@@ -71,7 +70,6 @@ public class RestaurantRestController extends AbstractRestController {
         repository.save(asEntity(to));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRestaurant(@PathVariable int id) {

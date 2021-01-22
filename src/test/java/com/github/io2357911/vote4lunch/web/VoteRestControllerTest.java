@@ -1,7 +1,7 @@
 package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Vote;
-import com.github.io2357911.vote4lunch.repository.VoteJpaRepository;
+import com.github.io2357911.vote4lunch.repository.VoteRepository;
 import com.github.io2357911.vote4lunch.to.VoteTo;
 import com.github.io2357911.vote4lunch.util.TimeProvider;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VoteRestControllerTest extends AbstractRestControllerTest {
 
     @Autowired
-    private VoteJpaRepository repository;
+    private VoteRepository repository;
 
     @Autowired
     private TimeProvider timeProvider;
