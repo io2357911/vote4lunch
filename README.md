@@ -50,6 +50,14 @@ docker run -p 8080:8080 vote4lunch
 
 3. Swagger documentation will be available at http://localhost:8080/vote4lunch/swagger-ui.html
 
+Credentials
+- User:
+    - login: user@mail.com
+    - password: user
+- Admin:
+    - login: admin@mail.com
+    - password: admin
+
 # REST API curl examples
 
 ## Restaurants API

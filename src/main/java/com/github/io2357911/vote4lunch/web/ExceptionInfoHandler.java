@@ -26,7 +26,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
-    private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     public static final String EXCEPTION_RESTAURANT_DUPLICATE = "Restaurant with the same name already exists";
     public static final String EXCEPTION_DISH_DUPLICATE = "Dish with the same name and date already exists";

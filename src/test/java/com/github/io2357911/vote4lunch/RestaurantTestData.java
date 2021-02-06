@@ -10,9 +10,9 @@ import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RestaurantTestData {
-    public static TestMatcher<Restaurant> MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class, "dishes", "votes");
+    public static final TestMatcher<Restaurant> MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class, "dishes", "votes");
 
-    public static TestMatcher<Restaurant> WITH_DISHES_MATCHER =
+    public static final TestMatcher<Restaurant> WITH_DISHES_MATCHER =
             TestMatcher.usingAssertions(Restaurant.class,
                     (a, e) -> {
                         throw new UnsupportedOperationException();

@@ -9,12 +9,11 @@ import static com.github.io2357911.vote4lunch.RestaurantTestData.restaurant2;
 import static com.github.io2357911.vote4lunch.model.AbstractBaseEntity.START_SEQ;
 
 public class DishTestData {
-    public static TestMatcher<Dish> MATCHER = TestMatcher.usingIgnoringFieldsComparator(Dish.class,"restaurant");
+    public static final TestMatcher<Dish> MATCHER = TestMatcher.usingIgnoringFieldsComparator(Dish.class,"restaurant");
 
     public static final int RESTAURANT1_DISH1_ID = START_SEQ + 4;
     public static final int RESTAURANT1_DISH2_ID = START_SEQ + 5;
     public static final int RESTAURANT2_DISH1_ID = START_SEQ + 6;
-    public static final int NOT_FOUND = 2;
 
     public static final Dish restaurant1Dish1 = new Dish(RESTAURANT1_DISH1_ID, "Big Mac", restaurant1,
             LocalDate.now(), 199);

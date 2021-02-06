@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.github.io2357911.vote4lunch.util.Util.nowIfNull;
 import static com.github.io2357911.vote4lunch.util.ValidationUtil.checkSingleModification;
 import static com.github.io2357911.vote4lunch.util.VoteUtil.asTo;
 
@@ -50,10 +49,12 @@ public class VoteRestController extends AbstractRestController {
     }
 
     @GetMapping
-    public VoteTo getVoteByDate(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
-                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
+    public VoteTo getVoteByDate(
+            @ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
+            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate created) {
         log.info("getVoteByDate user={}, created={}", authUser, created);
-        return asTo(voteRepository.getByUserAndCreated(authUser.getId(), nowIfNull(created)));
+        return asTo(voteRepository.getByUserAndCreated(authUser.getId(), created));
     }
 
     @GetMapping("/{id}")
