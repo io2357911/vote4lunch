@@ -45,9 +45,9 @@ public class DishRestController extends AbstractRestController {
     public ResponseEntity<Dish> createDish(@Valid @RequestBody DishTo to) {
         log.info("create {}", to);
         checkNew(to);
-        Dish newDish = createNewFromTo(to);
+        var newDish = createNewFromTo(to);
         newDish.setRestaurant(restaurantRepository.getOne(to.getRestaurantId()));
-        Dish created = dishRepository.save(newDish);
+        var created = dishRepository.save(newDish);
         return createResponseEntity(REST_URL, created.getId(), created);
     }
 
@@ -64,7 +64,7 @@ public class DishRestController extends AbstractRestController {
         log.info("update {}", to);
         assureIdConsistent(to, id);
         checkNotFoundWithId(dishRepository.findById(id), "Dish id=" + id + " not found");
-        Dish newDish = createNewFromTo(to);
+        var newDish = createNewFromTo(to);
         newDish.setId(to.getId());
         newDish.setRestaurant(restaurantRepository.getOne(to.getRestaurantId()));
         dishRepository.save(newDish);

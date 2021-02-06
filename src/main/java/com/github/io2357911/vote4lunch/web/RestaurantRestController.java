@@ -50,7 +50,7 @@ public class RestaurantRestController extends AbstractRestController {
     public ResponseEntity<RestaurantTo> createRestaurant(@Valid @RequestBody RestaurantTo to) {
         log.info("create {}", to);
         checkNew(to);
-        RestaurantTo created = asTo(repository.save(createNewFromTo(to)));
+        var created = asTo(repository.save(createNewFromTo(to)));
         return createResponseEntity(REST_URL, created.getId(), created);
     }
 

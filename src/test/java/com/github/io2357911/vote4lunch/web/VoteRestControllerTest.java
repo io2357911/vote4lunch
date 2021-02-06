@@ -1,6 +1,5 @@
 package com.github.io2357911.vote4lunch.web;
 
-import com.github.io2357911.vote4lunch.model.Vote;
 import com.github.io2357911.vote4lunch.repository.VoteRepository;
 import com.github.io2357911.vote4lunch.to.VoteTo;
 import com.github.io2357911.vote4lunch.util.TimeProvider;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
@@ -61,13 +59,13 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void create() throws Exception {
-        VoteTo newVote = asTo(getNew());
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        var newVote = asTo(getNew());
+        var action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .param("restaurantId", String.valueOf(newVote.getRestaurantId())))
                 .andDo(print());
 
-        VoteTo created = readFromJson(action, VoteTo.class);
+        var created = readFromJson(action, VoteTo.class);
         newVote.setId(created.getId());
         TO_MATCHER.assertMatch(created, newVote);
     }
@@ -94,7 +92,7 @@ class VoteRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void update() throws Exception {
-        Vote updated = getUpdated();
+        var updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .with(userHttpBasic(user))
                 .param("restaurantId", String.valueOf(updated.getRestaurant().getId())))

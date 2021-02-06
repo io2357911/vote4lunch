@@ -2,7 +2,7 @@ package com.github.io2357911.vote4lunch;
 
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 import static com.github.io2357911.vote4lunch.TestUtil.readListFromJsonMvcResult;
@@ -41,7 +41,7 @@ public class TestMatcher<T> {
 
     @SafeVarargs
     public final void assertMatch(Iterable<T> actual, T... expected) {
-        assertMatch(actual, Arrays.asList(expected));
+        assertMatch(actual, List.of(expected));
     }
 
     public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
@@ -54,7 +54,7 @@ public class TestMatcher<T> {
 
     @SafeVarargs
     public final ResultMatcher contentJson(T... expected) {
-        return contentJson(Arrays.asList(expected));
+        return contentJson(List.of(expected));
     }
 
     public ResultMatcher contentJson(Iterable<T> expected) {

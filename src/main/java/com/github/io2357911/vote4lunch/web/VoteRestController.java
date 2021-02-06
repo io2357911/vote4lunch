@@ -67,9 +67,9 @@ public class VoteRestController extends AbstractRestController {
     public ResponseEntity<VoteTo> createVote(@ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser,
                                              @RequestParam int restaurantId) {
         log.info("createVote user={}, restaurantId={}", authUser, restaurantId);
-        Vote vote = new Vote(null, userRepository.getOne(authUser.getId()),
+        var vote = new Vote(null, userRepository.getOne(authUser.getId()),
                 restaurantRepository.getOne(restaurantId), LocalDate.now());
-        Vote created = voteRepository.save(vote);
+        var created = voteRepository.save(vote);
         return createResponseEntity(REST_URL, created.getId(), asTo(created));
     }
 
@@ -80,7 +80,7 @@ public class VoteRestController extends AbstractRestController {
                            @RequestParam int restaurantId) {
         log.info("updateVote user={}, restaurantId={}", authUser, restaurantId);
         checkVoteCanBeChanged();
-        Vote vote = voteRepository.getByUserAndCreated(authUser.getId(), LocalDate.now())
+        var vote = voteRepository.getByUserAndCreated(authUser.getId(), LocalDate.now())
                 .orElseThrow(() -> new NotFoundException("Vote not found"));
         vote.setRestaurant(restaurantRepository.getOne(restaurantId));
         voteRepository.save(vote);

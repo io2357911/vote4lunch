@@ -8,10 +8,8 @@ import com.github.io2357911.vote4lunch.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.github.io2357911.vote4lunch.RestaurantTestData.NOT_FOUND;
 import static com.github.io2357911.vote4lunch.RestaurantTestData.*;
 import static com.github.io2357911.vote4lunch.TestUtil.readFromJson;
 import static com.github.io2357911.vote4lunch.TestUtil.userHttpBasic;
@@ -22,7 +20,8 @@ import static com.github.io2357911.vote4lunch.util.RestaurantUtil.asTo;
 import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_RESTAURANT_DUPLICATE;
 import static com.github.io2357911.vote4lunch.web.RestaurantRestController.REST_URL;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,7 +57,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void update() throws Exception {
-        Restaurant updated = getUpdated();
+        var updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + "/" + RESTAURANT1_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,14 +107,14 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void create() throws Exception {
-        Restaurant newRestaurant = getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        var newRestaurant = getNew();
+        var action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(asTo(newRestaurant))))
                 .andDo(print());
 
-        RestaurantTo created = readFromJson(action, RestaurantTo.class);
+        var created = readFromJson(action, RestaurantTo.class);
         int newId = created.id();
         newRestaurant.setId(newId);
         MATCHER.assertMatch(asEntity(created), newRestaurant);
@@ -136,7 +135,7 @@ class RestaurantRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void createDuplicate() throws Exception {
-        Restaurant restaurant = new Restaurant(null, restaurant1.getName());
+        var restaurant = new Restaurant(null, restaurant1.getName());
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)

@@ -2,7 +2,6 @@ package com.github.io2357911.vote4lunch.web;
 
 import com.github.io2357911.vote4lunch.model.Dish;
 import com.github.io2357911.vote4lunch.repository.DishRepository;
-import com.github.io2357911.vote4lunch.to.DishTo;
 import com.github.io2357911.vote4lunch.util.exception.NotFoundException;
 import com.github.io2357911.vote4lunch.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,8 @@ import static com.github.io2357911.vote4lunch.web.DishRestController.REST_URL;
 import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_DISH_DUPLICATE;
 import static com.github.io2357911.vote4lunch.web.ExceptionInfoHandler.EXCEPTION_DISH_FK_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,7 +61,7 @@ class DishRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void update() throws Exception {
-        Dish updated = getUpdated();
+        var updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + "/" + RESTAURANT1_DISH1_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,14 +102,14 @@ class DishRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void create() throws Exception {
-        Dish newDish = getNew();
+        var newDish = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(asTo(restaurant1.getId(), newDish))))
                 .andDo(print());
 
-        Dish created = readFromJson(action, Dish.class);
+        var created = readFromJson(action, Dish.class);
         newDish.setId(created.id());
         MATCHER.assertMatch(created, newDish);
         MATCHER.assertMatch(dishRepository.findById(newDish.id()).get(), newDish);
@@ -140,7 +140,7 @@ class DishRestControllerTest extends AbstractRestControllerTest {
 
     @Test
     void createDuplicate() throws Exception {
-        DishTo to = asTo(restaurant1Dish1);
+        var to = asTo(restaurant1Dish1);
         to.setId(null);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))

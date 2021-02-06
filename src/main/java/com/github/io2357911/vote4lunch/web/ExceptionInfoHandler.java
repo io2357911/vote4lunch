@@ -34,7 +34,7 @@ public class ExceptionInfoHandler {
     public static final String EXCEPTION_VOTE_DUPLICATE = "Vote already exists today";
     public static final String EXCEPTION_VOTE_FK_NOT_FOUND = "Restaurant not found for the vote";
 
-    private static final Map<String, String> CONSTRAINTS_MAP = new HashMap<String, String>() {{
+    private static final Map<String, String> CONSTRAINTS_MAP = new HashMap<>() {{
         put("restaurants_unique_name_idx", EXCEPTION_RESTAURANT_DUPLICATE);
         put("dishes_unique_restaurant_name_created_idx", EXCEPTION_DISH_DUPLICATE);
         put("votes_unique_user_created_idx", EXCEPTION_VOTE_DUPLICATE);

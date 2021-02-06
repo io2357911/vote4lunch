@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,7 +57,7 @@ public class AbstractRestControllerTest {
             assertEquals("http://localhost" + url, error.getUrl());
             assertEquals(status.value(), error.getStatus());
             if (details.length != 0) {
-                assertThat(details).hasSameElementsAs(Arrays.asList(error.getDetails()));
+                assertThat(details).hasSameElementsAs(List.of(error.getDetails()));
             }
         };
     }
